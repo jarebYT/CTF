@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scène de Crime - CTF</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Courier New', monospace;
+        }
+        .container {
+            position: relative;
+            width: 80vw; /* Ajustez selon la taille souhaitée */
+            max-width: 1000px; /* Taille fixe pour éviter le redimensionnement */
+        }
+        .scene {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+        .indice {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        .indice:hover {
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .phone {
+            width: 60px;
+            height: 60px;
+        }
+
+        .ordinateur {
+            width: 75px;
+            height: 75px;
+        }
+
+        .banane {
+            width: 50px;
+            height: 50px;
+        }
+        
+        .pistolet {
+            width: 45px;
+            height: 45px;
+        }
+
+        /* Style du pop-up */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+        .popup img {
+            max-width: 80%;
+            max-height: 80%;
+            border: 5px solid white;
+        }
+
+        .popup input {
+            margin-top: 10px;
+            padding: 5px;
+            font-size: 16px;
+        }
+        .popup button {
+            margin-top: 5px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .downloadLink {
+            margin-top: 5px;
+            padding: 10px;
+            font-size: 16px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .carrousel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+        }
+
+        .nav-btn {
+            background-color: rgba(255, 255, 255, 0.5);
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            font-size: 24px;
+        }
+
+        .nav-btn:hover {
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .fermer {
+            margin-top: 10px;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        #carrouselImage {
+            max-width: 80%;
+            max-height: 80vh;
+            border: 5px solid white;
+        }
+
+        .aide {
+            position: absolute;
+            background-color: rgb(255, 255, 255);
+            color: black;
+            font-size: 2em;
+            width: 50px;
+            top: 5%;
+            left: 5%;
+            cursor: pointer;
+        }
+
+        #mute-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #222;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        #downloadLink {
+            color: rgb(0, 0, 0);
+            text-decoration: none;
+            padding: 10px;
+            background-color: rgb(255, 255, 255);
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .note-zone {
+            position: absolute;
+            top: 25%;
+            left: 2%;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 20vw; /* 20% de la largeur de la scène */
+            max-width: 170px;
+            height: 30vh; /* 30% de la hauteur de la scène */
+            max-height: 300px;
+            resize: vertical;
+            overflow: auto;
+        }
+
+        textarea {
+            width: 90%; 
+            height: 50%;
+            resize: none;
+            border: none;
+            background: #f7f7f7;
+            padding: 10px;
+            font-size: 1rem;
+        }
+
+
+    </style>
+</head>
+<body>
+    <button class="aide" onclick="afficherPopupAide()" style="top: 5%; left: 5%;">?</button> <!-- Règles -->
+    <audio id="background-audio" loop autoplay>
+        <source src="assets/ambient.mp3" type="audio/mpeg">
+        Votre navigateur ne supporte pas l'audio HTML5.
+    </audio>
+
+    <div class="note-zone">
+        <h2>Bloc-note</h2>
+        <textarea placeholder="Notez ici les indices trouvés..."></textarea>
+    </div>
+
+    
+    <button id="mute-button" onclick="toggleAudio()">🔊</button>
+
+    <div class="container">
+        <img src="img/scene_crime.jpg" alt="Scène de crime" class="scene">
+        <div class="indice banane" onclick="window.open('https://www.youtube.com/watch?v=6F7Y0tcN0LQ', '_blank');" style="top: 84.5%; left: 20.5%;"></div> <!-- Banane -->
+        <div class="indice ordinateur" onclick="afficherPopupOrdinateur('img/ordinateur.jpg')" style="top: 22.7%; left: 67.5%;"></div> <!-- Ordinateur -->
+        <div class="indice cookie" onclick="window.open('https://orteil.dashnet.org/cookieclicker/', '_blank')" style="top: 43.5%; left: 36.8%;"></div> <!-- Cookie -->
+
+
+        <div class="indice pistolet" onclick="afficherPopup('img/indice1.png')" style="top: 63.5%; left: 21.3%;"></div> <!-- Indice 1 (pistolet) -->
+
+        <div class="indice portefeuille" onclick="afficherPopupPortefeuille('img/indice2.png')" style="top: 42.2%; left: 58.5%;"></div> <!-- Indice 2 (portefeuille)-->
+
+        <div class="indice lettre" onclick="afficherPopup('img/indice3.png')" style="top: 83%; left: 56.6%;"></div> <!-- Indice 3 (feuille) -->
+        <div class="indice phone" onclick="afficherPopupPhone('img/telephone.png')" style="top: 52.5%; left: 91.5%;"></div> <!-- Telephone pour indice 3 -->
+
+        <div class="indice" onclick="afficherPopupPDF('img/indice4.png')" style="top: 49.5%; left: 15%;"></div> <!-- Indice 4 (fichier PDF)-->
+
+
+    </div>
+
+    <div id="popup" class="popup" onclick="fermerPopup()">
+        <img id="popupImage" src="" alt="Indice">
+        
+    </div>
+    
+    <!-- Popup image de l'ordinateur -->
+    <div id="popupOrdinateur" class="popup">
+        <img src="img/ordinateur.jpg" alt="Ordinateur">
+        <input type="text" id="codeInputOrdinateur" placeholder="">
+        <button onclick="verifierCodeOrdinateur()">Valider le code</button>
+    </div>
+
+    <!-- Popup image du téléphone -->
+    <div id="popupPhone" class="popup">
+        <img src="img/telephone.png" alt="Téléphone">
+        <input type="text" id="codeInputPhone" placeholder="Entrez le code">
+        <button onclick="verifierCodePhone()">Appeler</button>
+        <audio id="occupeSon" src="assets/occupe.mp3"></audio>
+        <audio id="successSound" src="assets/phone.mp3"></audio>
+        <a id="downloadLink" href="#" onClick="javascript:downloadResource('assets/phone.mp3')" style="display: none;">Télécharger le fichier</a>
+        <p id="downloadMessage" style="display: none; color: white;">Si le fichier ne se télécharge pas, il est disponible dans assets/phone.mp3.</p>
+    </div>
+
+    <!-- Popup portefeuille -->
+    <div id="popupPortefeuille" class="popup">
+        <div class="carrousel">
+            <button class="nav-btn gauche" onclick="changerImage(-1)">&#10094;</button>
+            <img id="carrouselImage" src="img/carte1.jpg" alt="Carte du portefeuille">
+            <button class="nav-btn droite" onclick="changerImage(1)">&#10095;</button>
+        </div>
+        <button class="fermer" onclick="fermerPopupPortefeuille()">Fermer</button>
+    </div>
+
+    <!-- Popup du PDF -->
+    <div id="popupPDF" class="popup">
+        <img src="img/indice4.png" alt="fichier PDF">
+        <a href="assets/file.pdf" id="downloadLink" target="_blank" download>Ouvrir le fichier</a>
+    </div>
+
+    <!-- Popup aide -->
+    <div id="popupAide" class="popup" onclick="fermerPopupAide()">
+        <div style="background: white; padding: 20px; border-radius: 10px; max-width: 80%; max-height: 80%; overflow-y: auto;">
+            <h2></h2>
+            <p>1. Logiciels à utiliser : Audacity (effets->special->inverser sens)</p>
+            <p>2. Sites internets à utiliser : b64decode</p>
+            <p>3. Indice pour le fichier PDF : Encre invisible</p>
+            <p>4. Si vous êtes là, c'est que vous êtes bien nul :)</p>
+        </div>
+    </div>
+
+    <script>
+        const codeOrdinateur = "934798635145";
+        const codePhone = "555-2368";
+
+        function afficherPopup(imageSrc) {
+            document.getElementById('popupImage').src = imageSrc;
+            document.getElementById('popup').style.display = 'flex';
+        }
+
+        function fermerPopup() {
+            document.getElementById('popup').style.display = 'none';
+            document.getElementById('popupImage').src = "";
+        }
+
+        function afficherPopupOrdinateur() {
+            document.getElementById('popupOrdinateur').style.display = 'flex';
+        }
+
+        function afficherPopupPhone() {
+            document.getElementById('popupPhone').style.display = 'flex';
+        }
+
+        function verifierCodeOrdinateur() {
+            let input = document.getElementById('codeInputOrdinateur').value;
+            if (input === codeOrdinateur) {
+                window.open("victoire.html", "_self");}
+        }
+
+        function verifierCodePhone() {
+            let input = document.getElementById('codeInputPhone').value;
+            if (input === codePhone) {
+                document.getElementById('successSound').play();
+                document.getElementById('downloadLink').href = "assets/phone.mp3";
+                document.getElementById('downloadLink').style.display = 'block';
+                document.getElementById('downloadMessage').style.display = 'block';
+            } else {
+                document.getElementById('occupeSon').play();
+            }
+        }
+
+        document.getElementById('popup').addEventListener('click', function(event) {
+            if (event.target === this) {
+                this.style.display = 'none';
+            }
+        });
+
+        document.getElementById('popupOrdinateur').addEventListener('click', function(event) {
+            if (event.target === this) {
+                this.style.display = 'none';
+            }
+        });
+
+        document.getElementById('popupPhone').addEventListener('click', function(event) {
+            if (event.target === this) {
+                this.style.display = 'none';
+            }
+        });
+
+        function afficherPopupPDF() {
+            document.getElementById('popupPDF').style.display = 'flex';
+        }
+
+        document.getElementById('popupPDF').addEventListener('click', function(event) {
+            if (event.target === this) {
+                this.style.display = 'none';
+            }
+        });
+
+        function telechargerPDF() {
+            // Création d'un lien temporaire pour le téléchargement
+            var lien = document.createElement("a");
+            lien.href = "assets/file.pdf"; // Chemin vers le fichier PDF
+            lien.download = "indice4.pdf"; // Nom du fichier téléchargé
+            document.body.appendChild(lien);
+            lien.click(); // Simule un clic pour lancer le téléchargement
+            document.body.removeChild(lien); // Supprime l'élément après utilisation
+        }
+
+        // Fonctions Popup portefeuille
+        const imagesPortefeuille = [
+            "img/carte1.png",
+            "img/carte2.png",
+            "img/carte3.png",
+        ];
+        let indexImage = 0;
+
+        function afficherPopupPortefeuille() {
+            document.getElementById("popupPortefeuille").style.display = "flex";
+            document.getElementById("carrouselImage").src = imagesPortefeuille[indexImage];
+        }
+
+        function fermerPopupPortefeuille() {
+            document.getElementById("popupPortefeuille").style.display = "none";
+        }
+
+        function changerImage(direction) {
+            indexImage += direction;
+            if (indexImage < 0) indexImage = imagesPortefeuille.length - 1;
+            if (indexImage >= imagesPortefeuille.length) indexImage = 0;
+            document.getElementById("carrouselImage").src = imagesPortefeuille[indexImage];
+        }
+
+        function afficherPopupAide() {
+            document.getElementById('popupAide').style.display = 'flex';
+        }
+
+        function fermerPopupAide() {
+            document.getElementById('popupAide').style.display = 'none';
+        }
+
+        document.addEventListener("click", function startAudio() {
+            var audio = document.getElementById("background-audio");
+            audio.volume = 0.3;  // Réduire le volume à 30%
+            audio.play().catch(error => console.log("Autoplay bloqué : " + error));
+            document.removeEventListener("click", startAudio);
+        });
+
+        function toggleAudio() {
+            var audio = document.getElementById("background-audio");
+            var button = document.getElementById("mute-button");
+
+            if (audio.muted) {
+                audio.muted = false;
+                button.textContent = "🔊"; // Icône de son activé
+            } else {
+                audio.muted = true;
+                button.textContent = "🔇"; // Icône de son coupé
+            }
+        }
+
+        function downloadBlob(blob, filename) {
+            var a = document.createElement('a');
+            a.download = filename;
+            a.href = blob;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function downloadResource(url) {
+            const filename = url.split('/').pop(); // Correction du split
+
+            // On crée un lien Blob pour le téléchargement
+            fetch(url)
+                .then(response => response.blob())
+                .then(blob => {
+                    let blobUrl = URL.createObjectURL(blob);
+                    downloadBlob(blobUrl, filename);
+                })
+                .catch(e => console.error("Erreur lors du téléchargement : ", e));
+        }
+
+    </script>
+</body>
+</html>

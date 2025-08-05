@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enquête - Introduction</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: black;
+            color: white;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 60%;
+            max-width: 800px;
+            text-align: justify; /* Alignement propre sans effet de glissement */
+        }
+
+        #story {
+            font-size: 1.5rem;
+            white-space: pre-line; /* Gère les retours à la ligne */
+            line-height: 1.6;
+            display: none; /* Cacher le texte au début */
+        }
+
+        #startMessage {
+            font-size: 1.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            position: absolute; /* Position absolue pour le centrer */
+            top: 50%; /* Centrer verticalement */
+            left: 50%; /* Centrer horizontalement */
+            transform: translate(-50%, -50%); /* Ajuste l'élément pour qu'il soit parfaitement centré */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <p id="startMessage">Cliquez pour démarrer la cinématique</p>
+        <p id="story"></p>
+    </div>
+
+    <audio id="jazzMusic" loop autoplay muted>
+        <source src="assets/jazz.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const text = `New York, 1989. Une ville qui ne dort jamais, noyée dans la fumée des cigarettes et le bruit des sirènes.
+
+                        Dans un bureau en désordre, l’inspecteur Carter enquêtait sur une affaire bien trop grosse pour lui...
+
+                        A votre retour d'une patrouille, vous trouvez son bureau vide. Il a disparu.
+                        
+                        L'inspecteur Carter est malin, il a toujours un traceur GPS sur lui. Malheureusement, la localisation est sur son ordinateur, verouillé.
+                        
+                        Le code de son ordinateur est dissimulé à plusieurs endroits dans son bureau. A vous de devenir enquêteur !`;
+
+            let index = 0;
+            const speed = 50;
+            const storyElement = document.getElementById("story");
+            const startMessage = document.getElementById("startMessage");
+            const jazzMusic = document.getElementById("jazzMusic");
+
+            // Afficher le message pour cliquer
+            startMessage.style.display = 'block';
+
+            // Fonction pour afficher le texte lettre par lettre
+            function typeWriter() {
+                if (index < text.length) {
+                    storyElement.innerHTML = text.slice(0, index + 1).replace(/\n/g, "<br>");
+                    index++;
+                    setTimeout(typeWriter, speed);
+                } else {
+                    setTimeout(() => {
+                        window.location.href = 'ctf.html';
+                    }, 10000);
+                }
+            }
+
+            // Lorsque l'utilisateur clique, démarrer la cinématique
+            startMessage.addEventListener("click", function () {
+                // Masquer le message de démarrage
+                startMessage.style.display = 'none';
+                // Afficher le texte de la cinématique
+                storyElement.style.display = 'block';
+                // Lancer la musique et commencer l'écriture du texte
+                jazzMusic.muted = false;
+                jazzMusic.play().catch(error => console.log("Lecture automatique bloquée :", error));
+                typeWriter();
+            });
+        });
+    </script>
+
+</body>
+</html>

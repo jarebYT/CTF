@@ -1,0 +1,10 @@
+Code partie 1 (pistolet) : 934
+Q29kZSBwYXJ0aWUgMSA6IDkzNA==
+
+Code partie 2 (portefeuille) : 798
+
+Code partie 3 (telephone): 635
+
+Code partie 4 (fichier pdf): 145
+
+Code final : 934798635145
