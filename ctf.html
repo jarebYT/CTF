@@ -186,6 +186,22 @@
             font-size: 1rem;
         }
 
+        #popupPhone {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #popupPhoneDownload { 
+            left: 0; 
+            width: 20%; 
+            text-align: center;
+            justify-content: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
     </style>
 </head>
@@ -242,15 +258,17 @@
         <button onclick="verifierCodePhone()">Appeler</button>
         <audio id="occupeSon" src="assets/occupe.mp3"></audio>
         <audio id="successSound" src="assets/phone.mp3"></audio>
-        <a id="downloadLink" href="#" onClick="javascript:downloadResource('assets/phone.mp3')" style="display: none;">Télécharger le fichier</a>
-        <p id="downloadMessage" style="display: none; color: white;">Si le fichier ne se télécharge pas, il est disponible dans assets/phone.mp3.</p>
+        <div id="popupPhoneDownload">
+            <a id="downloadLink" href="#" onClick="javascript:downloadResource('assets/phone.mp3')" style="display: none;">Télécharger le fichier</a>
+            <p id="downloadMessage" style="display: none; color: white;">Si le fichier ne se télécharge pas, il est disponible dans assets/phone.mp3.</p>
+        </div>
     </div>
 
     <!-- Popup portefeuille -->
     <div id="popupPortefeuille" class="popup">
         <div class="carrousel">
             <button class="nav-btn gauche" onclick="changerImage(-1)">&#10094;</button>
-            <img id="carrouselImage" src="img/carte1.jpg" alt="Carte du portefeuille">
+            <img id="carrouselImage" src="img/carte1.png" alt="Carte du portefeuille">
             <button class="nav-btn droite" onclick="changerImage(1)">&#10095;</button>
         </div>
         <button class="fermer" onclick="fermerPopupPortefeuille()">Fermer</button>
@@ -269,7 +287,7 @@
             <p>1. Logiciels à utiliser : Audacity (effets->special->inverser sens)</p>
             <p>2. Sites internets à utiliser : b64decode</p>
             <p>3. Indice pour le fichier PDF : Encre invisible</p>
-            <p>4. Si vous êtes là, c'est que vous êtes bien nul :)</p>
+            <p>4. Il y a 4 codes de 3 chiffres à combiner pour déverouiller l'ordinateur</p>
         </div>
     </div>
 
@@ -342,13 +360,12 @@
         });
 
         function telechargerPDF() {
-            // Création d'un lien temporaire pour le téléchargement
             var lien = document.createElement("a");
-            lien.href = "assets/file.pdf"; // Chemin vers le fichier PDF
-            lien.download = "indice4.pdf"; // Nom du fichier téléchargé
+            lien.href = "assets/file.pdf";
+            lien.download = "indice4.pdf";
             document.body.appendChild(lien);
-            lien.click(); // Simule un clic pour lancer le téléchargement
-            document.body.removeChild(lien); // Supprime l'élément après utilisation
+            lien.click();
+            document.body.removeChild(lien);
         }
 
         // Fonctions Popup portefeuille
@@ -385,7 +402,7 @@
 
         document.addEventListener("click", function startAudio() {
             var audio = document.getElementById("background-audio");
-            audio.volume = 0.3;  // Réduire le volume à 30%
+            audio.volume = 0.3;
             audio.play().catch(error => console.log("Autoplay bloqué : " + error));
             document.removeEventListener("click", startAudio);
         });
@@ -396,10 +413,10 @@
 
             if (audio.muted) {
                 audio.muted = false;
-                button.textContent = "🔊"; // Icône de son activé
+                button.textContent = "🔊";
             } else {
                 audio.muted = true;
-                button.textContent = "🔇"; // Icône de son coupé
+                button.textContent = "🔇";
             }
         }
 
